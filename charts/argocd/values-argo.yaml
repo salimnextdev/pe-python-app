@@ -1,0 +1,28 @@
+redis-ha:
+  enabled: false
+
+controller:
+  replicas: 1
+
+server:
+  replicas: 1
+
+repoServer:
+  replicas: 2
+
+applicationSet:
+  replicas: 2
+
+global:
+  domain: argocd.test.com
+
+certificate:
+  enabled: true
+
+server:
+  ingress:
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    enabled: true
+    ingressClassName: nginx
+    tls: true
