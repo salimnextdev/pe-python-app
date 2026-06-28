@@ -42,12 +42,15 @@ jobs:
 
   cd:
     needs: ci
-    runs-on: sefl-hosted
+    runs-on: self-hosted
     steps:
 
       - name: Argo cd app-sync
         shell: bash
         run:  |
+          curl -ksSL -o argocd-linux-amd64 https:// argocd-server.argocd/download/argocd-linux-amd64
+          chmod +x argocd
+          mv ./argocd /usr/local/bin/argocd
           argocd login argocd-server.argocd \
           --insecure --grpc-web --username admin \
           --password ${{  secrets.ARGOCD_PASS  }}
