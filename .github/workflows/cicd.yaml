@@ -39,3 +39,18 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  cd:
+    needs: ci
+    runs-on: self-hosted
+    steps:
+
+      - name: Argocd app sync
+        shell: bash
+        run: |
+          argocd login argocd.test.com \
+          --insecure \
+          --grpc-web \
+          --username admin \
+          --password ${{  secrets.ARGO_PASS  }}
+          argocd app sync python-app
