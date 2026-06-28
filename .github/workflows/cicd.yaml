@@ -42,15 +42,13 @@ jobs:
 
   cd:
     needs: ci
-    runs-on: self-hosted
+    runs-on: sefl-hosted
     steps:
 
-      - name: Argocd app sync
+      - name: Argo cd app-sync
         shell: bash
-        run: |
-          argocd login argocd.test.com \
-          --insecure \
-          --grpc-web \
-          --username admin \
+        run:  |
+          argocd login argocd-server.argocd \
+          --insecure --grpc-web --username admin \
           --password ${{  secrets.ARGOCD_PASS  }}
           argocd app sync python-app
