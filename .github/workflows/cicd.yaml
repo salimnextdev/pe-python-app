@@ -39,17 +39,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-  cd:
-    needs: ci
-    runs-on: self-hosted
-    steps:
-      - name: Argo CD Install and Argocd app sync
-        shell: bash
-        run:  |
-          curl -ksSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-          chmod +x argocd
-          sudo mv ./argocd /usr/local/bin/argocd
-          argocd login argocd.test.com \
-          --insecure --grpc-web --username admin \
-          --password ${{secrets.ARGOCD_PASS}}
-          argocd app sync python-app
