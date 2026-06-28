@@ -11,8 +11,8 @@ env:
   IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/python-app
 
 jobs:
-  build-and-push:
-    runs-on: self-hosted
+  ci:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,3 +39,14 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+  cd:
+    needs: ci
+    runs-on: self-hosted
+    steps:
+      - name: Argocd app sync
+        shell: bash
+        run:  |
+          argocd login argocd-server.argocd \
+          --insecure --grpc-web --username admin \
+          --password ${{secrets.ARGOCD_PASS}}
+          argocd app sync python-app
