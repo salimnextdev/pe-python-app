@@ -48,6 +48,9 @@ jobs:
       - name: Argo cd app-sync
         shell: bash
         run:  |
-          TOKEN=$(curl -ks https://argocd-server.argocd/api/v1/session -d '{"username":"admin","password":"'${{ secrets.ARGOCD_PASS }}'"}'  | grep -o '"token":"[^"]*' | cut -d'"' -f4)
+          TOKEN=$(curl -ks https://argocd-server.argocd/api/v1/session \
+          -H "Content-Type: application/json" \
+          -d '{"username":"admin","password":"'${{ secrets.ARGOCD_PASS }}'"}'  | grep -o '"token":"[^"]*' | cut -d'"' -f4)
           curl -ks -X POST https://argocd-server.argocd/api/v1/applications/python-app/sync \
-          -H "Authorization: Bearer $TOKEN"
+          -H "Authorization: Bearer $TOKEN" \
+          -H "Content-Type: application/json"
